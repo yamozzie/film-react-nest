@@ -26,7 +26,7 @@ export class OrderService {
       );
 
       if (!success) {
-        throw new BadRequestException(`Место уже занято`)
+        throw new BadRequestException(`Место уже занято`);
       }
 
       processedTickets.push({

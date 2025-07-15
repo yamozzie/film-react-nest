@@ -19,8 +19,8 @@ import { OrderService } from './order/service/order.service';
       cache: true,
     }),
     ServeStaticModule.forRoot({
-      rootPath: path.resolve(__dirname, '..', 'public', 'afisha'),
-      serveRoot: '/content/afisha',
+      rootPath: path.resolve(__dirname, '..', 'public', 'content'),
+      serveRoot: '/content/',
     }),
     MongooseModule.forRoot(process.env.DATABASE_URL),
     MongooseModule.forFeature([{ name: Film.name, schema: FilmSchema }]),
