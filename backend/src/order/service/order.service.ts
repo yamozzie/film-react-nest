@@ -1,6 +1,4 @@
-import {
-  Injectable,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { faker } from '@faker-js/faker';
 
 import { FilmsService } from 'src/films/service/films.service';
@@ -27,11 +25,14 @@ export class OrderService {
         seatKey,
       );
 
-      if (success)
-        processedTickets.push({
-          ...ticket,
-          id: faker.string.uuid(),
-        });
+      if (!success) {
+        throw new BadRequestException(`Место уже занято`)
+      }
+
+      processedTickets.push({
+        ...ticket,
+        id: faker.string.uuid(),
+      });
     }
 
     return {

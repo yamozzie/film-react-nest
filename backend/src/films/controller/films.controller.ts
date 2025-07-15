@@ -1,10 +1,4 @@
-import {
-  Controller,
-  Get,
-  HttpStatus,
-  NotFoundException,
-  Param,
-} from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
 
 import { FilmsService } from '../service/films.service';
 
@@ -18,7 +12,7 @@ export class FilmsController {
 
     return {
       total: films.length,
-      items: films
+      items: films,
     };
   }
 
@@ -32,7 +26,7 @@ export class FilmsController {
 
     return {
       total: film.schedule.length,
-      items: film.schedule
+      items: film.schedule,
     };
   }
 }

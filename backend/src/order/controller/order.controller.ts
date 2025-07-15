@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { OrderService } from '../service/order.service';
 import { OrderDto } from '../dto/order.dto';
 
@@ -10,9 +10,6 @@ export class OrderController {
   async createOrder(@Body() OrderDto: OrderDto) {
     const result = await this.orderService.createOrder(OrderDto);
 
-    return {
-      status: HttpStatus.CREATED,
-      data: result,
-    };
+    return result;
   }
 }
