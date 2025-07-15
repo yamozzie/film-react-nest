@@ -1,0 +1,12 @@
+{
+    "email": "Samantha_Orn@gmail.com",
+    "phone": "+7 (999) 999-99-99",
+    "tickets": [{
+        "film": "",
+        "session": "",
+        "daytime": "",
+        "row": 1,
+        "seat": 1,
+        "price": 100
+    }]
+}
