@@ -1,32 +1,38 @@
-import { Controller, Get, HttpStatus, NotFoundException, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  NotFoundException,
+  Param,
+} from '@nestjs/common';
 
 import { FilmsService } from '../service/films.service';
 
 @Controller('films')
 export class FilmsController {
-    constructor(private readonly filmsService: FilmsService) {}
+  constructor(private readonly filmsService: FilmsService) {}
 
-    @Get()
-    async findAll() {
-        const films = await this.filmsService.findAll()
+  @Get()
+  async findAll() {
+    const films = await this.filmsService.findAll();
 
-        return {
-            status: HttpStatus.OK,
-            data: films
-        }
+    return {
+      total: films.length,
+      items: films
+    };
+  }
+
+  @Get(':id/schedule')
+  async findOne(@Param('id') id: string) {
+    const film = await this.filmsService.findOne(id);
+
+    if (!film) {
+      throw new NotFoundException(`Фильм с id: ${id} не найден`);
     }
 
-    @Get(':id/schedule')
-    async findOne(@Param('id') id: string) {
-        const film = await this.filmsService.findOne(id)
-
-        if (!film) {
-            throw new NotFoundException(`Фильм с id: ${id} не найден`)
-        }
-
-        return {
-            status: HttpStatus.OK,
-            data: film
-        }
-    }
+    return {
+      total: film.schedule.length,
+      items: film.schedule
+    };
+  }
 }

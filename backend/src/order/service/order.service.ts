@@ -1,33 +1,42 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+} from '@nestjs/common';
 import { faker } from '@faker-js/faker';
 
 import { FilmsService } from 'src/films/service/films.service';
-import { OrderDto, orderResponseDto, TicketResponseDto } from '../dto/order.dto';
+import {
+  OrderDto,
+  orderResponseDto,
+  TicketResponseDto,
+} from '../dto/order.dto';
 
 @Injectable()
 export class OrderService {
-    constructor(private readonly filmsService: FilmsService) {}
+  constructor(private readonly filmsService: FilmsService) {}
 
-    async createOrder(orderDto: OrderDto): Promise<orderResponseDto> {
-        const { tickets } = orderDto
+  async createOrder(orderDto: OrderDto): Promise<orderResponseDto> {
+    const { tickets } = orderDto;
 
-        const processedTickets: TicketResponseDto[] = []
+    const processedTickets: TicketResponseDto[] = [];
 
-        for (const ticket of tickets) {
-            const seatKey = `${ticket.row}:${ticket.seat}`
-            const success = await this.filmsService.takeSeat(ticket.film, ticket.session, seatKey)
+    for (const ticket of tickets) {
+      const seatKey = `${ticket.row}:${ticket.seat}`;
+      const success = await this.filmsService.takeSeat(
+        ticket.film,
+        ticket.session,
+        seatKey,
+      );
 
-            if (success)
+      if (success)
+        processedTickets.push({
+          ...ticket,
+          id: faker.string.uuid(),
+        });
+    }
 
-           processedTickets.push({
-            ...ticket,
-            id: faker.string.uuid(),
-           })
-        }
-
-        return {
-            total: processedTickets.length,
-            items: processedTickets
-        }
-    } 
+    return {
+      total: processedTickets.length,
+      items: processedTickets,
+    };
+  }
 }
