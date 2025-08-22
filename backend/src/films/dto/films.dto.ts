@@ -1,6 +1,4 @@
-//TODO описать DTO для запросов к /films
-
-import { Schedule } from '../schemas/film.schema';
+import { ScheduleDto } from 'src/schedule/dto/schedule.dto';
 
 export class FilmDto {
   id: string;
@@ -12,15 +10,5 @@ export class FilmDto {
   title: string;
   about: string;
   description: string;
-  schedule: Schedule[];
-}
-
-export class ScheduleDto {
-  id: string;
-  daytime: string;
-  hall: string;
-  rows: number;
-  seats: number;
-  price: number;
-  taken: string[];
+  schedule: ScheduleDto[];
 }

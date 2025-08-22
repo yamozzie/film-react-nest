@@ -1,21 +1,27 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
-import { Film } from 'src/films/schemas/film.schema';
+import { Film } from 'src/films/entities/film.entity';
+import { Schedule } from 'src/schedule/entities/schedule.entity';
 
 @Injectable()
-export class FilmRepository {
+export class filmsRepository {
   constructor(
-    @InjectModel(Film.name) private readonly FilmModel: Model<Film>,
+    @InjectRepository(Film) private readonly filmsRepository: Repository<Film>,
+    @InjectRepository(Schedule)
+    private readonly scheduleRepository: Repository<Schedule>,
   ) {}
 
-  async findAll() {
-    return this.FilmModel.find().lean();
+  async findAll(): Promise<Film[]> {
+    return await this.filmsRepository.find({ relations: ['schedule'] });
   }
 
-  async findById(id: string) {
-    return this.FilmModel.findOne({ id }).lean();
+  async findById(id: string): Promise<Film | undefined> {
+    return await this.filmsRepository.findOne({
+      where: { id },
+      relations: ['schedule'],
+    });
   }
 
   async updateScheduleSeats(
@@ -23,30 +29,23 @@ export class FilmRepository {
     scheduleId: string,
     seatKey: string,
   ): Promise<boolean> {
-    const film = await this.FilmModel.findOne({ id: filmId });
+    const film = await this.filmsRepository.findOne({
+      where: { id: filmId },
+      relations: ['schedule'],
+    });
 
     if (!film) return false;
 
-    const scheduleIndex = film.schedule.findIndex(
-      (item) => item.id === scheduleId,
-    );
+    const schedule = film.schedule.find((item) => item.id === scheduleId);
 
-    if (scheduleIndex === -1) return false;
+    if (!schedule) return false;
 
-    if (film.schedule[scheduleIndex].taken.includes(seatKey)) {
+    if (schedule.taken.includes(seatKey)) {
       return false;
     }
 
-    console.log(`Найден фильм:`, film.title);
-    console.log(`Найден сеанс:`, film.schedule[scheduleIndex].id);
-    console.log(`Текущие занятые места:`, film.schedule[scheduleIndex].taken);
-    console.log(`Проверяем место: ${seatKey}`);
-    console.log(
-      `Место ${seatKey} ${film.schedule[scheduleIndex].taken.includes(seatKey) ? 'занято' : 'свободно'}`,
-    );
-
-    film.schedule[scheduleIndex].taken.push(seatKey);
-    await film.save();
+    schedule.taken.push(seatKey);
+    await this.scheduleRepository.save(schedule);
 
     return true;
   }

@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { FilmRepository } from 'src/repository/films.repository';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { filmsRepository } from 'src/repository/films.repository';
 import { FilmDto } from '../dto/films.dto';
 
 @Injectable()
 export class FilmsService {
-  constructor(private readonly filmsRepository: FilmRepository) {}
+  constructor(private readonly filmsRepository: filmsRepository) {}
 
   async findAll(): Promise<FilmDto[]> {
     const films = await this.filmsRepository.findAll();
