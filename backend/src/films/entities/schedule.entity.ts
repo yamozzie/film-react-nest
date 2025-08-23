@@ -28,8 +28,8 @@ export class ScheduleEntity {
   @IsNumber()
   price: number;
 
-  @Column('text', { array: true, default: () => 'ARRAY[]::text[]' })
-  taken: string[];
+  @Column()
+  taken: string;
 
   @ManyToOne(() => FilmEntity, (film) => film.schedule)
   film: FilmEntity;

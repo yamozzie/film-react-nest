@@ -45,7 +45,7 @@ export class FilmsPostgreSqlRepository {
       return false;
     }
 
-    schedule.taken.push(seatKey);
+    schedule.taken = JSON.stringify(schedule.taken);
     await this.scheduleRepository.save(schedule);
 
     return true;
