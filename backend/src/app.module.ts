@@ -3,14 +3,12 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
 import * as path from 'node:path';
 
-import { configProvider } from './app.config.provider';
-import { Film, FilmSchema } from './films/schemas/film.schema';
+import { applicationConfig, configProvider } from './app.config.provider';
 import { FilmsController } from './films/controller/films.controller';
 import { FilmsService } from './films/service/films.service';
-import { FilmRepository } from './repository/films.repository';
 import { OrderController } from './order/controller/order.controller';
-import { MongooseModule } from '@nestjs/mongoose';
 import { OrderService } from './order/service/order.service';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -22,10 +20,9 @@ import { OrderService } from './order/service/order.service';
       rootPath: path.resolve(__dirname, '..', 'public', 'content'),
       serveRoot: '/content/',
     }),
-    MongooseModule.forRoot(process.env.DATABASE_URL),
-    MongooseModule.forFeature([{ name: Film.name, schema: FilmSchema }]),
+    DatabaseModule.register(applicationConfig.DATABASE_DRIVER)
   ],
   controllers: [FilmsController, OrderController],
-  providers: [configProvider, FilmsService, FilmRepository, OrderService],
+  providers: [configProvider, FilmsService, OrderService],
 })
 export class AppModule {}

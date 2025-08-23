@@ -1,13 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { FilmRepository } from 'src/repository/films.repository';
+import { Inject, Injectable } from '@nestjs/common';
+
 import { FilmDto } from '../dto/films.dto';
+import { FilmsMongoDBRepository } from 'src/repository/FilmsRepository/filmsMongoDB.repository';
+import { FilmsPostgreSqlRepository } from 'src/repository/filmsRepository/filmsPostgreSQL.repository';
 
 @Injectable()
 export class FilmsService {
-  constructor(private readonly filmsRepository: FilmRepository) {}
+  constructor(
+    @Inject('FILMS_REPOSITORY') private readonly FilmsRepository: 
+    | FilmsMongoDBRepository 
+    | FilmsPostgreSqlRepository) {}
 
   async findAll(): Promise<FilmDto[]> {
-    const films = await this.filmsRepository.findAll();
+    const films = await this.FilmsRepository.findAll();
     return films.map((film) => ({
       id: film.id,
       rating: film.rating,
@@ -31,7 +36,7 @@ export class FilmsService {
   }
 
   async findOne(id: string): Promise<FilmDto | null> {
-    const film = await this.filmsRepository.findById(id);
+    const film = await this.FilmsRepository.findById(id);
     if (!film) return null;
 
     return {
@@ -61,7 +66,7 @@ export class FilmsService {
     scheduleId: string,
     seatKey: string,
   ): Promise<boolean> {
-    return this.filmsRepository.updateScheduleSeats(
+    return this.FilmsRepository.updateScheduleSeats(
       filmId,
       scheduleId,
       seatKey,
