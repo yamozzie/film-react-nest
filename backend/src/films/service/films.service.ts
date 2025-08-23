@@ -7,9 +7,11 @@ import { FilmsPostgreSqlRepository } from 'src/repository/filmsRepository/filmsP
 @Injectable()
 export class FilmsService {
   constructor(
-    @Inject('FILMS_REPOSITORY') private readonly FilmsRepository: 
-    | FilmsMongoDBRepository 
-    | FilmsPostgreSqlRepository) {}
+    @Inject('FILMS_REPOSITORY')
+    private readonly FilmsRepository:
+      | FilmsMongoDBRepository
+      | FilmsPostgreSqlRepository,
+  ) {}
 
   async findAll(): Promise<FilmDto[]> {
     const films = await this.FilmsRepository.findAll();

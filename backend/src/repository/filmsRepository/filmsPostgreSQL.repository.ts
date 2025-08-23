@@ -1,14 +1,15 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
-import { FilmEntity } from "src/films/entities/film.entity";
-import { ScheduleEntity } from "src/films/entities/schedule.entity";
+import { FilmEntity } from 'src/films/entities/film.entity';
+import { ScheduleEntity } from 'src/films/entities/schedule.entity';
 
 @Injectable()
 export class FilmsPostgreSqlRepository {
   constructor(
-    @InjectRepository(FilmEntity) private filmsRepository: Repository<FilmEntity>,
+    @InjectRepository(FilmEntity)
+    private filmsRepository: Repository<FilmEntity>,
     @InjectRepository(ScheduleEntity)
     private readonly scheduleRepository: Repository<ScheduleEntity>,
   ) {}

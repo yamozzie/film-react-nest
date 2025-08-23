@@ -10,52 +10,52 @@ import { FilmsPostgreSqlRepository } from 'src/repository/filmsRepository/filmsP
 
 @Module({})
 export class DatabaseModule {
-    static register(dbms: string): DynamicModule {
-        const imports = []
-        const providers: Provider[] = []
-        const exports = []
+  static register(dbms: string): DynamicModule {
+    const imports = [];
+    const providers: Provider[] = [];
+    const exports = [];
 
-        switch (dbms) {
-            case 'mongodb': 
-                imports.push(
-                    MongooseModule.forRoot(applicationConfig.DATABASE_URL),
-                    MongooseModule.forFeature([{ name: Film.name, schema: FilmSchema }])
-                );
-                providers.push({
-                    provide: 'FILMS_REPOSITORY',
-                    useClass: FilmsMongoDBRepository
-                });
-                exports.push('FILMS_REPOSITORY');
-                break;
+    switch (dbms) {
+      case 'mongodb':
+        imports.push(
+          MongooseModule.forRoot(applicationConfig.DATABASE_URL),
+          MongooseModule.forFeature([{ name: Film.name, schema: FilmSchema }]),
+        );
+        providers.push({
+          provide: 'FILMS_REPOSITORY',
+          useClass: FilmsMongoDBRepository,
+        });
+        exports.push('FILMS_REPOSITORY');
+        break;
 
-            case 'postgres':
-            default:
-                imports.push(
-                    TypeOrmModule.forRoot({
-                        type: 'postgres',
-                        host: applicationConfig.DATABASE_HOST,
-                        port: +applicationConfig.DATABASE_PORT,
-                        username: applicationConfig.DATABASE_USERNAME,
-                        password: applicationConfig.DATABASE_PASSWORD,
-                        database: applicationConfig.DATABASE_NAME,
-                        entities: [FilmEntity, ScheduleEntity],
-                        synchronize: false
-                    }),
-                    TypeOrmModule.forFeature([FilmEntity, ScheduleEntity])
-                );
-                providers.push({
-                    provide: 'FILMS_REPOSITORY',
-                    useClass: FilmsPostgreSqlRepository
-                })
-                exports.push('FILMS_REPOSITORY')
-                break;
-        }
-
-        return {
-            module: DatabaseModule,
-            imports,
-            providers,
-            exports
-        }
+      case 'postgres':
+      default:
+        imports.push(
+          TypeOrmModule.forRoot({
+            type: 'postgres',
+            host: applicationConfig.DATABASE_HOST,
+            port: +applicationConfig.DATABASE_PORT,
+            username: applicationConfig.DATABASE_USERNAME,
+            password: applicationConfig.DATABASE_PASSWORD,
+            database: applicationConfig.DATABASE_NAME,
+            entities: [FilmEntity, ScheduleEntity],
+            synchronize: false,
+          }),
+          TypeOrmModule.forFeature([FilmEntity, ScheduleEntity]),
+        );
+        providers.push({
+          provide: 'FILMS_REPOSITORY',
+          useClass: FilmsPostgreSqlRepository,
+        });
+        exports.push('FILMS_REPOSITORY');
+        break;
     }
+
+    return {
+      module: DatabaseModule,
+      imports,
+      providers,
+      exports,
+    };
+  }
 }

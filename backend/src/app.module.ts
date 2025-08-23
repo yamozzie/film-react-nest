@@ -20,7 +20,7 @@ import { DatabaseModule } from './database/database.module';
       rootPath: path.resolve(__dirname, '..', 'public', 'content'),
       serveRoot: '/content/',
     }),
-    DatabaseModule.register(applicationConfig.DATABASE_DRIVER)
+    DatabaseModule.register(applicationConfig.DATABASE_DRIVER),
   ],
   controllers: [FilmsController, OrderController],
   providers: [configProvider, FilmsService, OrderService],

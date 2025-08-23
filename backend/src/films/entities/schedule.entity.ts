@@ -1,36 +1,36 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
-import { IsNumber, IsString } from "class-validator";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { IsNumber, IsString } from 'class-validator';
 
-import { FilmEntity } from "./film.entity";
+import { FilmEntity } from './film.entity';
 
 @Entity('schedules')
 export class ScheduleEntity {
-    @PrimaryGeneratedColumn()
-    id: string;
+  @PrimaryGeneratedColumn()
+  id: string;
 
-    @Column()
-    @IsString()
-    daytime: string
+  @Column()
+  @IsString()
+  daytime: string;
 
-    @Column()
-    @IsNumber()
-    hall: number
+  @Column()
+  @IsNumber()
+  hall: number;
 
-    @Column()
-    @IsNumber()
-    rows: number
+  @Column()
+  @IsNumber()
+  rows: number;
 
-    @Column()
-    @IsNumber()
-    seats: number
+  @Column()
+  @IsNumber()
+  seats: number;
 
-    @Column()
-    @IsNumber()
-    price: number
+  @Column()
+  @IsNumber()
+  price: number;
 
-    @Column("text", { array: true, default: () => "ARRAY[]::text[]" })
-    taken: string[];
+  @Column('text', { array: true, default: () => 'ARRAY[]::text[]' })
+  taken: string[];
 
-    @ManyToOne(() => FilmEntity, (film) => film.schedule)
-    film: FilmEntity
+  @ManyToOne(() => FilmEntity, (film) => film.schedule)
+  film: FilmEntity;
 }
