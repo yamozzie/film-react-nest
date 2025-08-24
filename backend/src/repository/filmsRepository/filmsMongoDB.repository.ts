@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { Film } from 'src/films/schemas/film.schema';
 
 @Injectable()
-export class FilmRepository {
+export class FilmsMongoDBRepository {
   constructor(
     @InjectModel(Film.name) private readonly FilmModel: Model<Film>,
   ) {}
