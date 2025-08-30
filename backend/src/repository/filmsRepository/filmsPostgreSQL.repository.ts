@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { FilmEntity } from 'src/films/entities/film.entity';
-import { ScheduleEntity } from 'src/films/entities/schedule.entity';
+import { FilmEntity } from '../../films/entities/film.entity';
+import { ScheduleEntity } from '../../films/entities/schedule.entity';
 
 @Injectable()
 export class FilmsPostgreSqlRepository {
@@ -49,5 +49,13 @@ export class FilmsPostgreSqlRepository {
     await this.scheduleRepository.save(schedule);
 
     return true;
+  }
+
+  async takeSeat(
+    filmId: string,
+    scheduleId: string,
+    seatKey: string,
+  ): Promise<boolean> {
+    return this.updateScheduleSeats(filmId, scheduleId, seatKey);
   }
 }

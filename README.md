@@ -1,5 +1,8 @@
 # FILM!
 
+## Подключение к сайту
+http://films-react-nest-yamozzie.nomorepartiessbs.ru/
+
 ## Установка
 
 ### MongoDB

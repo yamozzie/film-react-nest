@@ -1,0 +1,74 @@
+services:
+  database: 
+    image: postgres:16.4
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_DRIVER}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - internal
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - '8080:80'
+    env_file:
+      - .env.example
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - internal
+    
+  frontend:
+    image: 'ghcr.io/yamozzie/film-react-nest-frontend:latest'
+    environment:
+      VITE_BASE_URL: /
+      VITE_API_URL: /api/afisha
+      VITE_CDN_URL: /content/afisha
+    volumes:
+      - frontend_build:/app/dist
+  
+  backend:
+    image: 'ghcr.io/yamozzie/film-react-nest-backend:latest'
+    environment:
+      DATABASE_DRIVER: ${DATABASE_DRIVER}
+      DATABASE_URL: ${DATABASE_URL}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      MODE: ${MODE}
+      LOGGER: ${LOGGER}
+    ports:
+      - 3000:3000
+    networks:
+      - internal
+    depends_on:
+      - database
+  
+  server:
+    image: 'ghcr.io/yamozzie/film-react-nest-server:latest'
+    ports:
+      - 81:80
+    volumes:
+      - frontend_build:/var/www
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - internal
+
+volumes:
+  db_data:
+  pgadmin-data:
+  frontend_build:
+
+networks:
+  internal:

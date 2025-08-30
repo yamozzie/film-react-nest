@@ -50,4 +50,12 @@ export class FilmsMongoDBRepository {
 
     return true;
   }
+
+  async takeSeat(
+    filmId: string,
+    scheduleId: string,
+    seatKey: string,
+  ): Promise<boolean> {
+    return this.updateScheduleSeats(filmId, scheduleId, seatKey);
+  }
 }

@@ -10,11 +10,15 @@ export const configProvider = {
       driver: process.env.DATABASE_DRIVER ?? 'mongodb',
       url: process.env.DATABASE_URL,
     },
+    mode: process.env.MODE,
+    logger: process.env.LOGGER,
   },
 };
 
 export interface AppConfig {
   database: AppConfigDatabase;
+  mode: string;
+  logger: string;
 }
 
 export interface AppConfigDatabase {
