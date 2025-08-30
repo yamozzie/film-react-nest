@@ -47,6 +47,6 @@ jobs:
       - name: Build and push server
         uses: docker/build-push-action@v6
         with:
-          context: '{{defaultContext}}:server'
+          context: '{{defaultContext}}:nginx'
           push: true
           tags: 'ghcr.io/yamozzie/film-react-nest-server:latest'
