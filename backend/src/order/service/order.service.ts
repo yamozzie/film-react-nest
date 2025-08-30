@@ -1,16 +1,23 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { faker } from '@faker-js/faker';
 
-import { FilmsService } from 'src/films/service/films.service';
+import { FilmsService } from '../../films/service/films.service';
 import {
   OrderDto,
   orderResponseDto,
   TicketResponseDto,
 } from '../dto/order.dto';
+import { FilmsMongoDBRepository } from 'src/repository/filmsRepository/filmsMongoDB.repository';
+import { FilmsPostgreSqlRepository } from 'src/repository/filmsRepository/filmsPostgreSQL.repository';
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly filmsService: FilmsService) {}
+  constructor(
+    @Inject('FILMS_REPOSITORY')
+    private readonly filmsRepository:
+    | FilmsMongoDBRepository
+    | FilmsPostgreSqlRepository
+  ) {}
 
   async createOrder(orderDto: OrderDto): Promise<orderResponseDto> {
     const { tickets } = orderDto;
@@ -19,7 +26,7 @@ export class OrderService {
 
     for (const ticket of tickets) {
       const seatKey = `${ticket.row}:${ticket.seat}`;
-      const success = await this.filmsService.takeSeat(
+      const success = await this.filmsRepository.takeSeat(
         ticket.film,
         ticket.session,
         seatKey,

@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { FilmDto } from '../dto/films.dto';
-import { FilmsMongoDBRepository } from 'src/repository/FilmsRepository/filmsMongoDB.repository';
-import { FilmsPostgreSqlRepository } from 'src/repository/filmsRepository/filmsPostgreSQL.repository';
+import { FilmsMongoDBRepository } from '../../repository/filmsRepository/filmsMongoDB.repository';
+import { FilmsPostgreSqlRepository } from '../..//repository/filmsRepository/filmsPostgreSQL.repository';
 
 @Injectable()
 export class FilmsService {
