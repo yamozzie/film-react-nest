@@ -12,7 +12,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api/afisha');
   app.enableCors();
 
-  const config = app.get('CONFIG')
+  const config = app.get('CONFIG');
 
   if (config.logger !== 'none') {
     app.useLogger(
@@ -22,10 +22,10 @@ async function bootstrap() {
           ? new JsonLogger()
           : config.mode === 'prod' && config.logger === 'tskv'
             ? new TSKVLogger()
-            : undefined
+            : undefined,
     );
   }
-  
+
   await app.listen(3000);
 }
 bootstrap();

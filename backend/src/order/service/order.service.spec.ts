@@ -6,6 +6,7 @@ import { OrderDto, TicketDto } from '../dto/order.dto';
 
 describe('OrderService', () => {
   let service: OrderService;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let filmsRepository: FilmsPostgreSqlRepository;
 
   const mockTickets: TicketDto = {
@@ -14,13 +15,13 @@ describe('OrderService', () => {
     daytime: '2025-01-01',
     row: 2,
     seat: 3,
-    price: 850
+    price: 850,
   };
 
   const mockOrderData: OrderDto = {
     tickets: [mockTickets],
     email: 'test@example.com',
-    phone: '+79001234567'
+    phone: '+79001234567',
   };
 
   const mockRepository = {
@@ -34,7 +35,7 @@ describe('OrderService', () => {
         {
           provide: 'FILMS_REPOSITORY',
           useValue: mockRepository,
-        }
+        },
       ],
     }).compile();
 
@@ -58,7 +59,7 @@ describe('OrderService', () => {
     expect(mockRepository.takeSeat).toHaveBeenCalledWith(
       mockTickets.film,
       mockTickets.session,
-      `${mockTickets.row}:${mockTickets.seat}`
+      `${mockTickets.row}:${mockTickets.seat}`,
     );
     expect(response.total).toBe(1);
     expect(response.items[0]).toMatchObject({
@@ -70,7 +71,9 @@ describe('OrderService', () => {
   it('should throw BadRequestException if seat is taken', async () => {
     mockRepository.takeSeat.mockResolvedValue(false);
 
-    await expect(service.createOrder(mockOrderData)).rejects.toThrow(BadRequestException);
+    await expect(service.createOrder(mockOrderData)).rejects.toThrow(
+      BadRequestException,
+    );
     expect(mockRepository.takeSeat).toHaveBeenCalled();
   });
 
@@ -78,17 +81,14 @@ describe('OrderService', () => {
     mockRepository.takeSeat.mockResolvedValue(true);
     const multiOrder: OrderDto = {
       ...mockOrderData,
-      tickets: [
-        mockTickets,
-        { ...mockTickets, row: 3, seat: 4, price: 900 }
-      ]
+      tickets: [mockTickets, { ...mockTickets, row: 3, seat: 4, price: 900 }],
     };
 
     const response = await service.createOrder(multiOrder);
 
     expect(response.total).toBe(2);
     expect(response.items.length).toBe(2);
-    response.items.forEach(item => {
+    response.items.forEach((item) => {
       expect(item.id).toBeDefined();
     });
   });

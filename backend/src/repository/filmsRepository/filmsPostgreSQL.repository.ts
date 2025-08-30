@@ -56,10 +56,6 @@ export class FilmsPostgreSqlRepository {
     scheduleId: string,
     seatKey: string,
   ): Promise<boolean> {
-    return this.updateScheduleSeats(
-      filmId,
-      scheduleId,
-      seatKey,
-    );
+    return this.updateScheduleSeats(filmId, scheduleId, seatKey);
   }
 }

@@ -11,7 +11,7 @@ export const configProvider = {
       url: process.env.DATABASE_URL,
     },
     mode: process.env.MODE,
-    logger: process.env.LOGGER
+    logger: process.env.LOGGER,
   },
 };
 

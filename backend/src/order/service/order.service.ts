@@ -1,7 +1,6 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { faker } from '@faker-js/faker';
 
-import { FilmsService } from '../../films/service/films.service';
 import {
   OrderDto,
   orderResponseDto,
@@ -15,8 +14,8 @@ export class OrderService {
   constructor(
     @Inject('FILMS_REPOSITORY')
     private readonly filmsRepository:
-    | FilmsMongoDBRepository
-    | FilmsPostgreSqlRepository
+      | FilmsMongoDBRepository
+      | FilmsPostgreSqlRepository,
   ) {}
 
   async createOrder(orderDto: OrderDto): Promise<orderResponseDto> {

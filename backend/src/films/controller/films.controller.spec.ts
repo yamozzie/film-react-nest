@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { FilmsController } from '../controller/films.controller';
 import { FilmsService } from '../service/films.service';
 import { FilmDto, ScheduleDto } from '../dto/films.dto';
-import { NotFoundException } from '@nestjs/common';
 
 describe('FilmsController', () => {
   let controller: FilmsController;

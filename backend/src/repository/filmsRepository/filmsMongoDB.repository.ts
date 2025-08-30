@@ -51,15 +51,11 @@ export class FilmsMongoDBRepository {
     return true;
   }
 
-    async takeSeat(
+  async takeSeat(
     filmId: string,
     scheduleId: string,
     seatKey: string,
   ): Promise<boolean> {
-    return this.updateScheduleSeats(
-      filmId,
-      scheduleId,
-      seatKey,
-    );
+    return this.updateScheduleSeats(filmId, scheduleId, seatKey);
   }
 }
